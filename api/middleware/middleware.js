@@ -1,10 +1,9 @@
 const Users = require('../users/users-model');
-const Posts = require('../posts/posts-model');
 
 const logger = (req, res, next) => {
   console.log('request method:', req.method);
   console.log('request url:', req.url);
-  console.log('timestamp:', new Date.now());
+  console.log('timestamp:', Date.now());
 
   next();
 };
@@ -24,23 +23,32 @@ const validateUserId = async (req, res, next) => {
 };
 
 const validateUser = (req, res, next) => {
-  // DO YOUR MAGIC
+  if (!req.body.name || !req.body.name.trim()) {
+    next({ status: 400, message: 'missing required name field' });
+  } else {
+    next();
+  }
 };
 
 const validatePost = (req, res, next) => {
-  // DO YOUR MAGIC
+  if (!req.body.text || !req.body.text.trim()) {
+    next({ status: 400, message: 'missing required text field' });
+  } else {
+    next();
+  }
 };
 
 // eslint-disable-next-line
 const errorHandling = (err, req, res, next) => {
-  res
-    .status(err.status || 500)
-    .json({ message: `Horror in the router: ${err.message}`, stack: err.stack });
+  res.status(err.status || 500).json({ message: err.message });
 };
 
 // do not forget to expose these functions to other modules
 
 module.exports = {
   logger,
+  validateUserId,
+  validateUser,
+  validatePost,
   errorHandling,
 };
