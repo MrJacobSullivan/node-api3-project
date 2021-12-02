@@ -23,7 +23,7 @@ const validateUserId = async (req, res, next) => {
 };
 
 const validateUser = (req, res, next) => {
-  if (!req.body.name || !req.body.name.trim()) {
+  if (!req.body.name) {
     next({ status: 400, message: 'missing required name field' });
   } else {
     next();
